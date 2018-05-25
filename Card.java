@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 
 public class Card {
@@ -7,8 +8,9 @@ public class Card {
 	int health;
 	int x;
 	int y;
-	static int width = 75;
-	static int height = 100;
+	int width = 75;
+	int height = 100;
+	boolean blue = true;
 
 	public Card(String[] a) {
 		name = a[0];
@@ -43,13 +45,16 @@ public class Card {
 	}
 
 	public void click() {
-		width *= 1.2;
-		height *= 1.2;
+		//width *= 1.2;
+		//height *= 1.2;
+		blue = false;
+		System.out.println(name);
 	}
 
 	public void unclick() {
-		width /= 1.2;
-		height /= 1.2;
+		//width /= 1.2;
+		//height /= 1.2;
+		blue = true;
 	}
 
 	public String getName() {
@@ -69,6 +74,12 @@ public class Card {
 	}
 
 	public void draw(Graphics g) {
-		g.drawRect(x, y, width, height);
+		if (blue == true){
+		g.setColor(Color.BLUE);
+		}
+		else{
+			g.setColor(Color.RED);
+		}
+		g.fillRect(x, y, width, height);
 	}
 }
