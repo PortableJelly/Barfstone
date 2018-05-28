@@ -11,6 +11,10 @@ public class Card {
 	int width = 75;
 	int height = 100;
 	boolean blue = true;
+	
+	public Card(){
+		
+	}
 
 	public Card(String[] a) {
 		name = a[0];

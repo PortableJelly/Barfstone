@@ -3,27 +3,27 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Board extends JPanel{
 	
-	static JFrame f = new JFrame("WINDOW NAME");
-	
+	static JFrame f = new JFrame("Barfstone");
 	static EndTurn e = new EndTurn();
-	
-	static Deck deck = new Deck();
-	static ArrayList<Card> friendlyCards = new ArrayList<Card>();
+	boolean clicked = false;
+	Player player1 = new Player();
 	static int x = 10;
 	static int y = 10;
+	Card cardClicked = new Card();
+	Card cardReleased = new Card();
 	
 	public void setup(){
-		friendlyCards.add(deck.drawCard());
-		friendlyCards.get(0).setPosition(50, 50);
-		friendlyCards.add(deck.drawCard());
-		friendlyCards.get(1).setPosition(150, 50);
+		player1.getControlled().add(player1.deck.drawCard());
+		player1.getControlled().get(0).setPosition(200, 500);
+		player1.getControlled().add(player1.deck.drawCard());
+		player1.getControlled().get(1).setPosition(150, 50);
+		System.out.println(player1.getControlled().size());
 
 		f.setSize(1000, 800);
 		f.setLocationRelativeTo(null);
@@ -32,29 +32,51 @@ public class Board extends JPanel{
 		f.setVisible(true);
 		f.addMouseListener(new MouseListener(){
 			public void mouseClicked(MouseEvent m) {
-				x = m.getX();
-				y = m.getY();
+				int mX = m.getX()-7;
+				int mY = m.getY()-30;
+				if(mX > e.x && mX < e.x+e.width && mY > e.y && mY < e.y+e.height) {
+                    e.click();
+				}
+				//x = m.getX();
+				//y = m.getY();
 			}
 			public void mouseEntered(MouseEvent m) {
 			}
 			public void mouseExited(MouseEvent m) {
 			}
 			public void mousePressed(MouseEvent m) {
+				clicked = false;
 				int mX = m.getX()-7;
 				int mY = m.getY()-30;
-				for (Card c : friendlyCards){
+				for (Card c : player1.getControlled()){
 					if(mX > c.getX() && mX < c.getX()+c.getWidth() && mY > c.getY() && mY < c.getY()+c.getHeight()) {
-                        c.click();  
+                        c.click();
+                        cardClicked = c;
+                        clicked = true;
                     }
 				}
 				if(mX > e.x && mX < e.x+e.width && mY > e.y && mY < e.y+e.height) {
-                    e.click();
+                    e.pressed();
 				}
-				
 			}
 			public void mouseReleased(MouseEvent m) {
-				for (Card c : friendlyCards){
+				int mX = m.getX()-7;
+				int mY = m.getY()-30;
+				for (Card c : player1.getControlled()){
                         c.unclick(); 
+				}
+				if (clicked){
+				for (Card c : player1.getControlled()){
+					if(mX > c.getX() && mX < c.getX()+c.getWidth() && mY > c.getY() && mY < c.getY()+c.getHeight()) {
+                        cardReleased = c;
+                        cardClicked.takeDamage(cardReleased.getAttack());
+                        cardReleased.takeDamage(cardClicked.getAttack());
+                        System.out.println("clicked: " + cardClicked.getName() + "(" + cardClicked.getHealth() + "), released: " + cardReleased.getName() + "(" + cardReleased.getHealth() + ")");
+                    }
+				}
+				}
+				if(mX > e.x && mX < e.x+e.width && mY > e.y && mY < e.y+e.height) {
+                    e.unclick();
 				}
 			}
 		});
@@ -65,8 +87,9 @@ public class Board extends JPanel{
 	}
 	
 	public void paint(Graphics g){
-		for (Card card : friendlyCards){
-			card.draw(g);
+		for (int i = 0; i < player1.getControlled().size(); i++){
+			player1.getControlled().get(i).setPosition(200+(100*i), 500);
+			player1.getControlled().get(i).draw(g);
 		}
 		e.draw(g);
 	}
