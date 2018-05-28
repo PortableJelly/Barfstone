@@ -38,7 +38,26 @@ public class Deck {
 	}
 	
 	public Card drawCard(){
-		return cards.poll();
+		try{
+		if (!cards.peek().equals(null)){
+			return cards.poll();
+		}
+		}
+		catch(NullPointerException e){
+			return null;
+		}
+		return null;
+	}
+	
+	public boolean checkDeck(){
+		try{
+			if (!cards.peek().equals(null)){
+				return true;
+			}
+		}
+		catch(NullPointerException e){
+		}
+		return false;
 	}
 	
 	public void printDeck(){

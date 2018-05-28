@@ -3,7 +3,7 @@ import java.awt.Graphics;
 
 public class EndTurn {
 	int x = 850;
-	int y = 400;
+	int y = 300;
 	int width = 100;
 	int height = 50;
 	int playersTurn = 1;
