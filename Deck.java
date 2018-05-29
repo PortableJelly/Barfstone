@@ -11,7 +11,7 @@ public class Deck {
 	Queue<Card> cards = new LinkedList<Card>();
 	
 	public Deck(){
-		ArrayList a = fileReader();
+		ArrayList<String> a = fileReader();
 		for(int i = 0; i < a.size(); i++){
 			cards.add(new Card(((String) a.get(i)).split(", ")));
 		}

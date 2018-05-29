@@ -3,16 +3,20 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 public class Player {
+	int num;
 	int health = 30;
 	int mana = 1;
-	int x = 200;
-	int y = 650;
-	int width = 100;
-	int height = 150;
-	static Deck deck = new Deck();
-	static ArrayList<Card> hand = new ArrayList<Card>();
-	static ArrayList<Card> controlled = new ArrayList<Card>();
+	static int x = 200;
+	static int y = 650;
+	static int width = 100;
+	static int height = 150;
+	Deck deck = new Deck();
+	ArrayList<Card> hand = new ArrayList<Card>();
+	ArrayList<Card> controlled = new ArrayList<Card>();
 	
+	public Player(int i){
+		num = i;
+	}
 	public void turnStart(){
 		mana++;
 	}

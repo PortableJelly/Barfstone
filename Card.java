@@ -10,10 +10,18 @@ public class Card {
 	int y;
 	int width = 75;
 	int height = 100;
+	boolean canAttack = false;
 	boolean blue = true;
 	
 	public Card(){
 		
+	}
+	
+	public Card(String name, int mana, int attack, int health){
+		this.name = name;
+		this.mana = mana;
+		this.attack = attack;
+		this.health = health;
 	}
 
 	public Card(String[] a) {
@@ -85,5 +93,8 @@ public class Card {
 			g.setColor(Color.RED);
 		}
 		g.fillRect(x, y, width, height);
+		g.setColor(Color.WHITE);
+		g.drawString(name, x+(width/2)-(name.length()*2), y+(height/2));
+		g.drawString(attack + "/" + health, x+(width/2)-(name.length()*2), y+(height/2)+10);
 	}
 }

@@ -13,8 +13,8 @@ public class Board extends JPanel{
 	static EndTurn e = new EndTurn();
 	static DrawDeck d = new DrawDeck();
 	boolean clicked = false;
-	Player player1 = new Player();
-	Player player2 = new Player();
+	Player player1 = new Player(1);
+	Player player2 = new Player(2);
 	static int x = 10;
 	static int y = 10;
 	Card cardClicked = new Card();
@@ -43,7 +43,8 @@ public class Board extends JPanel{
 				}
 				if(mX > d.x && mX < d.x+d.width && mY > d.y && mY < d.y+d.height) {
 					if (player1.getDeck().checkDeck()){
-						player1.getHand().add(player1.getDeck().drawCard());
+						player1.addToHand(player1.getDeck().drawCard());
+						System.out.println(player1.getHand().size());
 					}
 					else{
 						System.out.println("No cards left in deck.");
@@ -114,19 +115,29 @@ public class Board extends JPanel{
 	}
 	
 	public void paint(Graphics g){
+		if (e.getTurn() == 1){
 		for (int i = 0; i < player1.getControlled().size(); i++){
 			player1.getControlled().get(i).setPosition(200+(100*i), 500);
 			player1.getControlled().get(i).draw(g);
 		}
 		for (int i = 0; i < player1.getHand().size(); i++){
+			System.out.println("test");
 			player1.getHand().get(i).setPosition(200+(100*i), 650);
 			player1.getHand().get(i).draw(g);
+		}
+		for (int i = 0; i < player2.getHand().size(); i++){
+			g.setColor(Color.RED);
+			g.fillRect(200+(100*i), 150, 75, 100);
+		}
+		}
+		else{
+			
 		}
 		e.draw(g);
 		d.draw(g);
 	}
 	
 	public Board(){
-		
+
 	}
 }

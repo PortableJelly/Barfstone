@@ -37,4 +37,8 @@ public class EndTurn {
 		System.out.println("Turn ended. Players turn: " + playersTurn);
 	}
 	
+	public int getTurn(){
+		return playersTurn;
+	}
+	
 }
