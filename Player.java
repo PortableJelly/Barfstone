@@ -6,10 +6,10 @@ public class Player {
 	int num;
 	int health = 30;
 	int mana = 1;
-	static int x = 200;
-	static int y = 650;
-	static int width = 100;
-	static int height = 150;
+	int x = 200;
+	int y = 650;
+	int width = 100;
+	int height = 150;
 	Deck deck = new Deck();
 	ArrayList<Card> hand = new ArrayList<Card>();
 	ArrayList<Card> controlled = new ArrayList<Card>();
@@ -45,6 +45,11 @@ public class Player {
 	
 	public ArrayList<Card> getHand(){
 		return hand;
+	}
+	
+	public void setPosition(int x, int y){
+		this.x = x;
+		this.y = y;
 	}
 	
 	public void draw(Graphics g) {
