@@ -13,14 +13,18 @@ public class Board extends JPanel {
 	static EndTurn e = new EndTurn();
 	static DrawDeck d = new DrawDeck();
 	boolean clicked = false;
-	static Player player1 = new Player(1);
-	static Player player2 = new Player(2);
+	static Player player1;
+	static Player player2;
 	static int x = 10;
 	static int y = 10;
+	static int targetX;
+	static int targetY;
 	Card cardClicked = new Card();
 	Card cardReleased = new Card();
 
-	public void setup() {
+	public void setup(String player1Name, String player2Name) {
+		player1 = new Player(player1Name, 1);
+		player2 = new Player(player2Name, 0);
 		player2.addToHand(new Card("Test", 1, 2, 3));
 		player2.getControlled().add(player2.getDeck().drawCard());
 
@@ -31,6 +35,11 @@ public class Board extends JPanel {
 		f.setVisible(true);
 		f.setResizable(false);
 		f.addMouseListener(new MouseListener() {
+			
+			public void mouseMoved(MouseEvent m){
+				targetX = m.getX() - 7;
+				targetY = m.getY() - 30;
+			}
 
 			public void mouseClicked(MouseEvent m) {
 				int mX = m.getX() - 7;
@@ -186,6 +195,7 @@ public class Board extends JPanel {
 				}
 			}
 		});
+
 	}
 
 	public void loop() {
@@ -236,6 +246,10 @@ public class Board extends JPanel {
 			player1.setPosition(75, 150);
 			player1.draw(g);
 		}
+		//if (clicked){
+			g.setColor(Color.YELLOW);
+			g.drawOval(targetX, targetY, 10, 10);
+		//}
 		e.draw(g);
 		d.draw(g);
 	}
@@ -256,6 +270,6 @@ public class Board extends JPanel {
 	}
 
 	public Board() {
-
+		
 	}
 }

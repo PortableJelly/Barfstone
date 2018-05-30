@@ -3,9 +3,10 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 public class Player {
-	int num;
+	String name = "blank";
 	int health = 30;
 	int mana = 1;
+	int currentMana;
 	int x = 200;
 	int y = 650;
 	int width = 100;
@@ -14,8 +15,9 @@ public class Player {
 	ArrayList<Card> hand = new ArrayList<Card>();
 	ArrayList<Card> controlled = new ArrayList<Card>();
 	
-	public Player(int i){
-		num = i;
+	public Player(String name, int i){
+		this.name = name;
+		mana = i;
 	}
 	public void turnStart(){
 		mana++;
@@ -55,6 +57,8 @@ public class Player {
 	public void draw(Graphics g) {
 		g.setColor(Color.GREEN);
 		g.fillRect(x, y, width, height);
+		g.setColor(Color.WHITE);
+		g.drawString(name, x+(width/2)-(name.length()*2), y+(height/2));
 	}
 
 }
