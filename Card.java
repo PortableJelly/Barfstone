@@ -84,6 +84,10 @@ public class Card {
 	public int getHealth() {
 		return health;
 	}
+	
+	public void changeCanAttack(boolean c){
+		canAttack = c;
+	}
 
 	public void draw(Graphics g) {
 		if (blue == true){

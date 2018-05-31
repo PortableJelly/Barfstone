@@ -6,7 +6,7 @@ public class Player {
 	String name = "blank";
 	int health = 30;
 	int mana = 1;
-	int currentMana;
+	int currentMana = 0;
 	int x = 200;
 	int y = 650;
 	int width = 100;
@@ -19,8 +19,49 @@ public class Player {
 		this.name = name;
 		mana = i;
 	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public int getHealth() {
+		return health;
+	}
+	
+	public int getMana() {
+		return mana;
+	}
+	public int getCurrentMana() {
+		return currentMana;
+	}
+	
 	public void turnStart(){
 		mana++;
+		currentMana = mana;
+		for (Card c : controlled){
+			c.changeCanAttack(true);
+		}
+		
+	}
+	
+	public void takeDamage(int damage){
+		health = health - damage;
 	}
 	
 	public void addToHand(Card c){
@@ -59,6 +100,8 @@ public class Player {
 		g.fillRect(x, y, width, height);
 		g.setColor(Color.WHITE);
 		g.drawString(name, x+(width/2)-(name.length()*2), y+(height/2));
+		g.setColor(Color.WHITE);
+		g.drawString(Integer.toString(health), x+(width/2)-(name.length()*2), y+(height/2)+50);
 	}
 
 }

@@ -35,8 +35,8 @@ public class Board extends JPanel {
 		f.setVisible(true);
 		f.setResizable(false);
 		f.addMouseListener(new MouseListener() {
-			
-			public void mouseMoved(MouseEvent m){
+
+			public void mouseMoved(MouseEvent m) {
 				targetX = m.getX() - 7;
 				targetY = m.getY() - 30;
 			}
@@ -159,6 +159,10 @@ public class Board extends JPanel {
 										+ ")");
 							}
 						}
+						if (mX > player2.getX() && mX < player2.getX() + player2.getWidth() && mY > player2.getY()
+								&& mY < player2.getY() + player2.getHeight()) {
+							player2.takeDamage(cardClicked.getAttack());
+						}
 					} else {
 						for (Card c : player1.getControlled()) {
 							if (mX > c.getX() && mX < c.getX() + c.getWidth() && mY > c.getY()
@@ -171,6 +175,10 @@ public class Board extends JPanel {
 										+ ")");
 
 							}
+						}
+						if (mX > player1.getX() && mX < player1.getX() + player1.getWidth() && mY > player1.getY()
+								&& mY < player1.getY() + player1.getHeight()) {
+							player1.takeDamage(cardClicked.getAttack());
 						}
 					}
 					healthCheck();
@@ -246,10 +254,10 @@ public class Board extends JPanel {
 			player1.setPosition(75, 150);
 			player1.draw(g);
 		}
-		//if (clicked){
-			g.setColor(Color.YELLOW);
-			g.drawOval(targetX, targetY, 10, 10);
-		//}
+		// if (clicked){
+		g.setColor(Color.YELLOW);
+		g.drawOval(targetX, targetY, 10, 10);
+		// }
 		e.draw(g);
 		d.draw(g);
 	}
@@ -269,7 +277,15 @@ public class Board extends JPanel {
 		}
 	}
 
+	public Player getPlayer1() {
+		return player1;
+	}
+
+	public Player getPlayer2() {
+		return player2;
+	}
+
 	public Board() {
-		
+
 	}
 }
