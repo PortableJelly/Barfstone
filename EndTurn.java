@@ -17,16 +17,13 @@ public class EndTurn {
 				g.setColor(Color.RED);
 			}
 		g.fillRect(x, y, width, height);
+		g.setColor(Color.BLACK);
+		g.drawString("End turn.", x+10, y+(height/2));
 	}
 	
 	public void pressed(){
 		yellow = false;
-		if (playersTurn == 1){
-			playersTurn = 2;
-		}
-		else{
-			playersTurn = 1;
-		}
+
 	}
 	
 	public void unclick(){
@@ -34,6 +31,12 @@ public class EndTurn {
 	}
 	
 	public void click(){
+		if (playersTurn == 1){
+			playersTurn = 2;
+		}
+		else{
+			playersTurn = 1;
+		}
 		System.out.println("Turn ended. Players turn: " + playersTurn);
 	}
 	

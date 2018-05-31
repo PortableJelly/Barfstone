@@ -6,7 +6,7 @@ public class Player {
 	String name = "blank";
 	int health = 30;
 	int mana = 1;
-	int currentMana = 0;
+	int currentMana = 1;
 	int x = 200;
 	int y = 650;
 	int width = 100;
@@ -18,6 +18,7 @@ public class Player {
 	public Player(String name, int i){
 		this.name = name;
 		mana = i;
+		currentMana = i;
 	}
 	
 	public String getName() {
@@ -51,9 +52,18 @@ public class Player {
 		return currentMana;
 	}
 	
+	public void changeCurrentMana(int remove){
+		currentMana = currentMana - remove;
+	}
+	
 	public void turnStart(){
+		if (mana != 10){
 		mana++;
+		}
 		currentMana = mana;
+		if (deck.checkDeck() && hand.size() < 6){
+		hand.add(deck.drawCard());
+		}
 		for (Card c : controlled){
 			c.changeCanAttack(true);
 		}
@@ -101,7 +111,9 @@ public class Player {
 		g.setColor(Color.WHITE);
 		g.drawString(name, x+(width/2)-(name.length()*2), y+(height/2));
 		g.setColor(Color.WHITE);
-		g.drawString(Integer.toString(health), x+(width/2)-(name.length()*2), y+(height/2)+50);
+		g.drawString(Integer.toString(currentMana) + "/" + Integer.toString(mana) + " MP", x+(width/2)-(name.length()*2), y+(height/2)+50);
+		g.setColor(Color.WHITE);
+		g.drawString(Integer.toString(health) + " HP", x+(width/2)-(name.length()*2), y+(height/2)+25);
 	}
 
 }

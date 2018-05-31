@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,22 +26,24 @@ public class Board extends JPanel {
 	public void setup(String player1Name, String player2Name) {
 		player1 = new Player(player1Name, 1);
 		player2 = new Player(player2Name, 0);
-		player2.addToHand(new Card("Test", 1, 2, 3));
-		player2.getControlled().add(player2.getDeck().drawCard());
-
+		for (int i = 0; i < 3; i++) {
+			player1.addToHand(player1.getDeck().drawCard());
+			player2.addToHand(player2.getDeck().drawCard());
+		}
 		f.setSize(1000, 800);
 		f.setLocationRelativeTo(null);
 		f.add(new Board());
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
 		f.setResizable(false);
-		f.addMouseListener(new MouseListener() {
-
-			public void mouseMoved(MouseEvent m) {
+		f.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent m) {
 				targetX = m.getX() - 7;
 				targetY = m.getY() - 30;
 			}
-
+		});
+		f.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent m) {
 				int mX = m.getX() - 7;
 				int mY = m.getY() - 30;
@@ -50,8 +53,13 @@ public class Board extends JPanel {
 								&& mX < player1.getHand().get(i).getX() + player1.getHand().get(i).getWidth()
 								&& mY > player1.getHand().get(i).getY()
 								&& mY < player1.getHand().get(i).getY() + player1.getHand().get(i).getHeight()) {
-							player1.getControlled().add(player1.getHand().get(i));
-							player1.getHand().remove(i);
+							if (manaCheck(player1, player1.getHand().get(i).getMana())) {
+								player1.changeCurrentMana(player1.getHand().get(i).getMana());
+								player1.getControlled().add(player1.getHand().get(i));
+								player1.getHand().remove(i);
+							} else {
+								System.out.println("Player does not have enough mana to play this.");
+							}
 						}
 					}
 				} else {
@@ -60,28 +68,48 @@ public class Board extends JPanel {
 								&& mX < player2.getHand().get(i).getX() + player2.getHand().get(i).getWidth()
 								&& mY > player2.getHand().get(i).getY()
 								&& mY < player2.getHand().get(i).getY() + player2.getHand().get(i).getHeight()) {
-							player2.getControlled().add(player2.getHand().get(i));
-							player2.getHand().remove(i);
+							if (manaCheck(player2, player2.getHand().get(i).getMana())) {
+								player2.changeCurrentMana(player2.getHand().get(i).getMana());
+								player2.getControlled().add(player2.getHand().get(i));
+								player2.getHand().remove(i);
+							} else {
+								System.out.println("Player does not have enough mana to play this.");
+							}
 						}
 					}
 				}
 				if (mX > e.x && mX < e.x + e.width && mY > e.y && mY < e.y + e.height) {
 					e.click();
+					if (e.getTurn() == 1) {
+						player1.turnStart();
+					} else {
+						player2.turnStart();
+					}
 				}
 				if (mX > d.x && mX < d.x + d.width && mY > d.y && mY < d.y + d.height) {
 					if (e.getTurn() == 1) {
-						if (player1.getDeck().checkDeck()) {
-							player1.addToHand(player1.getDeck().drawCard());
-							System.out.println(player1.getHand().size());
+						if (manaCheck(player1, 5) && player1.getHand().size() < 6) {
+							if (player1.getDeck().checkDeck()) {
+								player1.addToHand(player1.getDeck().drawCard());
+								System.out.println(player1.getHand().size());
+							} else {
+								System.out.println("No cards left in deck.");
+							}
 						} else {
-							System.out.println("No cards left in deck.");
+							System.out.println(
+									"Player either does not have enough mana to do this or has at least 6 cards in hand.");
 						}
 					} else {
-						if (player2.getDeck().checkDeck()) {
-							player2.addToHand(player2.getDeck().drawCard());
-							System.out.println(player2.getHand().size());
+						if (manaCheck(player2, 5) && player1.getHand().size() < 6) {
+							if (player2.getDeck().checkDeck()) {
+								player2.addToHand(player2.getDeck().drawCard());
+								System.out.println(player2.getHand().size());
+							} else {
+								System.out.println("No cards left in deck.");
+							}
 						} else {
-							System.out.println("No cards left in deck.");
+							System.out.println(
+									"Player either does not have enough mana to do this or has at least 6 cards in hand.");
 						}
 					}
 					// d.click();
@@ -147,41 +175,48 @@ public class Board extends JPanel {
 				int mX = m.getX() - 7;
 				int mY = m.getY() - 30;
 				if (clicked) {
-					if (e.getTurn() == 1) {
-						for (Card c : player2.getControlled()) {
-							if (mX > c.getX() && mX < c.getX() + c.getWidth() && mY > c.getY()
-									&& mY < c.getY() + c.getHeight()) {
-								cardReleased = c;
-								cardClicked.takeDamage(cardReleased.getAttack());
-								cardReleased.takeDamage(cardClicked.getAttack());
-								System.out.println("clicked: " + cardClicked.getName() + "(" + cardClicked.getHealth()
-										+ "), released: " + cardReleased.getName() + "(" + cardReleased.getHealth()
-										+ ")");
+					if (canAttackCheck(cardClicked)) {
+						if (e.getTurn() == 1) {
+							for (Card c : player2.getControlled()) {
+								if (mX > c.getX() && mX < c.getX() + c.getWidth() && mY > c.getY()
+										&& mY < c.getY() + c.getHeight()) {
+									cardReleased = c;
+									cardClicked.takeDamage(cardReleased.getAttack());
+									cardReleased.takeDamage(cardClicked.getAttack());
+									System.out.println("clicked: " + cardClicked.getName() + "("
+											+ cardClicked.getHealth() + "), released: " + cardReleased.getName() + "("
+											+ cardReleased.getHealth() + ")");
+									cardClicked.changeCanAttack(false);
+								}
+							}
+							if (mX > player2.getX() && mX < player2.getX() + player2.getWidth() && mY > player2.getY()
+									&& mY < player2.getY() + player2.getHeight()) {
+								player2.takeDamage(cardClicked.getAttack());
+								cardClicked.changeCanAttack(false);
+							}
+						} else {
+							for (Card c : player1.getControlled()) {
+								if (mX > c.getX() && mX < c.getX() + c.getWidth() && mY > c.getY()
+										&& mY < c.getY() + c.getHeight()) {
+									cardReleased = c;
+									cardClicked.takeDamage(cardReleased.getAttack());
+									cardReleased.takeDamage(cardClicked.getAttack());
+									System.out.println("clicked: " + cardClicked.getName() + "("
+											+ cardClicked.getHealth() + "), released: " + cardReleased.getName() + "("
+											+ cardReleased.getHealth() + ")");
+									cardClicked.changeCanAttack(false);
+								}
+							}
+							if (mX > player1.getX() && mX < player1.getX() + player1.getWidth() && mY > player1.getY()
+									&& mY < player1.getY() + player1.getHeight()) {
+								player1.takeDamage(cardClicked.getAttack());
+								cardClicked.changeCanAttack(false);
 							}
 						}
-						if (mX > player2.getX() && mX < player2.getX() + player2.getWidth() && mY > player2.getY()
-								&& mY < player2.getY() + player2.getHeight()) {
-							player2.takeDamage(cardClicked.getAttack());
-						}
+						healthCheck();
 					} else {
-						for (Card c : player1.getControlled()) {
-							if (mX > c.getX() && mX < c.getX() + c.getWidth() && mY > c.getY()
-									&& mY < c.getY() + c.getHeight()) {
-								cardReleased = c;
-								cardClicked.takeDamage(cardReleased.getAttack());
-								cardReleased.takeDamage(cardClicked.getAttack());
-								System.out.println("clicked: " + cardClicked.getName() + "(" + cardClicked.getHealth()
-										+ "), released: " + cardReleased.getName() + "(" + cardReleased.getHealth()
-										+ ")");
-
-							}
-						}
-						if (mX > player1.getX() && mX < player1.getX() + player1.getWidth() && mY > player1.getY()
-								&& mY < player1.getY() + player1.getHeight()) {
-							player1.takeDamage(cardClicked.getAttack());
-						}
+						System.out.println("Card was either played this turn or already attacked.");
 					}
-					healthCheck();
 				}
 				for (Card c : player1.getControlled()) {
 					c.unclick();
@@ -195,12 +230,8 @@ public class Board extends JPanel {
 				for (Card c : player2.getHand()) {
 					c.unclick();
 				}
-				if (mX > e.x && mX < e.x + e.width && mY > e.y && mY < e.y + e.height) {
-					e.unclick();
-				}
-				if (mX > d.x && mX < d.x + d.width && mY > d.y && mY < d.y + d.height) {
-					d.unclick();
-				}
+				e.unclick();
+				d.unclick();
 			}
 		});
 
@@ -228,7 +259,7 @@ public class Board extends JPanel {
 				g.setColor(Color.RED);
 				g.fillRect(200 + (100 * i), 150, 75, 100);
 			}
-			player1.setPosition(75, 650);
+			player1.setPosition(75, 550);
 			player1.draw(g);
 			player2.setPosition(75, 150);
 			player2.draw(g);
@@ -249,15 +280,16 @@ public class Board extends JPanel {
 				g.setColor(Color.RED);
 				g.fillRect(200 + (100 * i), 150, 75, 100);
 			}
-			player2.setPosition(75, 650);
+			player2.setPosition(75, 550);
 			player2.draw(g);
 			player1.setPosition(75, 150);
 			player1.draw(g);
 		}
-		// if (clicked){
-		g.setColor(Color.YELLOW);
-		g.drawOval(targetX, targetY, 10, 10);
-		// }
+		if (clicked) {
+			System.out.println("clicked");
+			g.setColor(Color.CYAN);
+			g.fillOval(targetX, targetY, 10, 10);
+		}
 		e.draw(g);
 		d.draw(g);
 	}
@@ -275,6 +307,20 @@ public class Board extends JPanel {
 				player2.getControlled().remove(i);
 			}
 		}
+	}
+
+	public boolean manaCheck(Player p, int m) {
+		if (p.getCurrentMana() < m) {
+			return false;
+		}
+		return true;
+	}
+
+	public boolean canAttackCheck(Card c) {
+		if (c.getCanAttack() == false) {
+			return false;
+		}
+		return true;
 	}
 
 	public Player getPlayer1() {

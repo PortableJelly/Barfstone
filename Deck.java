@@ -60,6 +60,10 @@ public class Deck {
 		return false;
 	}
 	
+	public int returnSize(){
+		return cards.size();
+	}
+	
 	public void printDeck(){
 		for (Card card : cards){
 			System.out.println(card.getName() + card.getMana() + card.getAttack() + card.getHealth());

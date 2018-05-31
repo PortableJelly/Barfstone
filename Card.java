@@ -85,6 +85,10 @@ public class Card {
 		return health;
 	}
 	
+	public boolean getCanAttack(){
+		return canAttack;
+	}
+	
 	public void changeCanAttack(boolean c){
 		canAttack = c;
 	}
@@ -99,6 +103,7 @@ public class Card {
 		g.fillRect(x, y, width, height);
 		g.setColor(Color.WHITE);
 		g.drawString(name, x+(width/2)-(name.length()*2), y+(height/2));
-		g.drawString(attack + "/" + health, x+(width/2)-(name.length()*2), y+(height/2)+10);
+		g.drawString(attack + "/" + health, x+(width/2)-(name.length()*2), y+(height/2)+15);
+		g.drawString(mana + " MP", x+(width/2)-(name.length()*2), y+(height/2)+30);
 	}
 }

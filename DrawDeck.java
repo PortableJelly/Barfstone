@@ -16,6 +16,9 @@ public class DrawDeck {
 				g.setColor(Color.RED);
 			}
 		g.fillRect(x, y, width, height);
+		g.setColor(Color.WHITE);
+		g.drawString("Draw from Deck", x+10, y+(height/2));
+		g.drawString("(5 Mana)", x+15, y+(height/2)+10);
 	}
 	
 	public void pressed(){
