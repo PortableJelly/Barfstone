@@ -87,15 +87,17 @@ public class Board extends JPanel {
 					} else {
 						player2.turnStart();
 					}
+					tieCheck();
 				}
 				if (mX > d.x && mX < d.x + d.width && mY > d.y && mY < d.y + d.height) {
 					if (e.getTurn() == 1) {
 						if (manaCheck(player1, 5) && player1.getHand().size() < 6) {
 							if (player1.getDeck().checkDeck()) {
 								player1.addToHand(player1.getDeck().drawCard());
+								player1.changeCurrentMana(5);
 								System.out.println(player1.getHand().size());
 							} else {
-								System.out.println("No cards left in deck.");
+								t.newPrompt("No cards left in deck.", "Attention:");
 							}
 						} else {
 							
@@ -104,9 +106,10 @@ public class Board extends JPanel {
 						if (manaCheck(player2, 5) && player1.getHand().size() < 6) {
 							if (player2.getDeck().checkDeck()) {
 								player2.addToHand(player2.getDeck().drawCard());
+								player2.changeCurrentMana(5);
 								System.out.println(player2.getHand().size());
 							} else {
-								System.out.println("No cards left in deck.");
+								t.newPrompt("No cards left in deck.", "Attention:");
 							}
 						} else {
 							t.newPrompt("Player either does not have enough mana to do this or has at least 6 cards in hand.", "Attention:");
@@ -326,6 +329,13 @@ public class Board extends JPanel {
 			return false;
 		}
 		return true;
+	}
+	
+	public void tieCheck(){
+		if (player1.getDeck().returnSize() == 0 && player1.getHand().size() == 0 && player1.getControlled().size() == 0 && player2.getDeck().returnSize() == 0 && player2.getHand().size() == 0 && player2.getControlled().size() == 0){
+			tie = true;
+		}
+		tie = false;
 	}
 	
 	public boolean getTie(){

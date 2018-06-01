@@ -8,13 +8,28 @@ import java.util.Queue;
 
 public class Deck {
 	
+	ArrayList<Card> unshuffled = new ArrayList<Card>();
+	ArrayList<Integer> usedNumbers = new ArrayList<Integer>();
 	Queue<Card> cards = new LinkedList<Card>();
 	
 	public Deck(){
 		ArrayList<String> a = fileReader();
 		for(int i = 0; i < a.size(); i++){
-			cards.add(new Card(((String) a.get(i)).split(", ")));
+			unshuffled.add(new Card(((String) a.get(i)).split(", ")));
 		}
+		boolean foundNumber = false;
+		for (int i = 0; i < unshuffled.size()-1; i++){
+			do{
+			int randCard = (int) (Math.random()*(unshuffled.size()-1));
+			if (!usedNumbers.contains(randCard)){
+				cards.add(unshuffled.get(randCard));
+				usedNumbers.add(randCard);
+				foundNumber = true;
+			}
+			}while(foundNumber == false);
+			foundNumber = false;
+		}
+		
 	}
 	
 	public ArrayList<String> fileReader(){
