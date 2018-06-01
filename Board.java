@@ -9,11 +9,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Board extends JPanel {
-
+	
+	static TextPrompt t = new TextPrompt();
 	static JFrame f = new JFrame("Barfstone");
 	static EndTurn e = new EndTurn();
 	static DrawDeck d = new DrawDeck();
-	boolean clicked = false;
+	static boolean clicked = false;
+	static boolean tie = false;
 	static Player player1;
 	static Player player2;
 	static int x = 10;
@@ -53,12 +55,12 @@ public class Board extends JPanel {
 								&& mX < player1.getHand().get(i).getX() + player1.getHand().get(i).getWidth()
 								&& mY > player1.getHand().get(i).getY()
 								&& mY < player1.getHand().get(i).getY() + player1.getHand().get(i).getHeight()) {
-							if (manaCheck(player1, player1.getHand().get(i).getMana())) {
+							if (manaCheck(player1, player1.getHand().get(i).getMana()) && player1.getControlled().size() < 5) {
 								player1.changeCurrentMana(player1.getHand().get(i).getMana());
 								player1.getControlled().add(player1.getHand().get(i));
 								player1.getHand().remove(i);
 							} else {
-								System.out.println("Player does not have enough mana to play this.");
+								t.newPrompt("Player either does not have enough mana to play this or controls 5 minions.", "Attention:");
 							}
 						}
 					}
@@ -68,12 +70,12 @@ public class Board extends JPanel {
 								&& mX < player2.getHand().get(i).getX() + player2.getHand().get(i).getWidth()
 								&& mY > player2.getHand().get(i).getY()
 								&& mY < player2.getHand().get(i).getY() + player2.getHand().get(i).getHeight()) {
-							if (manaCheck(player2, player2.getHand().get(i).getMana())) {
+							if (manaCheck(player2, player2.getHand().get(i).getMana()) && player2.getControlled().size() < 5) {
 								player2.changeCurrentMana(player2.getHand().get(i).getMana());
 								player2.getControlled().add(player2.getHand().get(i));
 								player2.getHand().remove(i);
 							} else {
-								System.out.println("Player does not have enough mana to play this.");
+								t.newPrompt("Player either does not have enough mana to play this or controls 5 minions.", "Attention:");
 							}
 						}
 					}
@@ -96,8 +98,7 @@ public class Board extends JPanel {
 								System.out.println("No cards left in deck.");
 							}
 						} else {
-							System.out.println(
-									"Player either does not have enough mana to do this or has at least 6 cards in hand.");
+							
 						}
 					} else {
 						if (manaCheck(player2, 5) && player1.getHand().size() < 6) {
@@ -108,8 +109,7 @@ public class Board extends JPanel {
 								System.out.println("No cards left in deck.");
 							}
 						} else {
-							System.out.println(
-									"Player either does not have enough mana to do this or has at least 6 cards in hand.");
+							t.newPrompt("Player either does not have enough mana to do this or has at least 6 cards in hand.", "Attention:");
 						}
 					}
 					// d.click();
@@ -125,9 +125,10 @@ public class Board extends JPanel {
 			}
 
 			public void mousePressed(MouseEvent m) {
-				clicked = false;
 				int mX = m.getX() - 7;
 				int mY = m.getY() - 30;
+				targetX = mX;
+				targetY = mY;
 				if (e.getTurn() == 1) {
 					for (int i = 0; i < player1.getHand().size(); i++) {
 						if (mX > player1.getHand().get(i).getX()
@@ -215,7 +216,7 @@ public class Board extends JPanel {
 						}
 						healthCheck();
 					} else {
-						System.out.println("Card was either played this turn or already attacked.");
+						t.newPrompt("Card was either played this turn or already attacked.", "Attention:");
 					}
 				}
 				for (Card c : player1.getControlled()) {
@@ -232,6 +233,7 @@ public class Board extends JPanel {
 				}
 				e.unclick();
 				d.unclick();
+				clicked = false;
 			}
 		});
 
@@ -286,9 +288,12 @@ public class Board extends JPanel {
 			player1.draw(g);
 		}
 		if (clicked) {
-			System.out.println("clicked");
-			g.setColor(Color.CYAN);
+			g.setColor(Color.RED);
+			g.fillOval(targetX-5, targetY-5, 20, 20);
+			g.setColor(Color.WHITE);
 			g.fillOval(targetX, targetY, 10, 10);
+			g.setColor(Color.RED);
+			g.fillOval(targetX+2,targetY+2, 5, 5);
 		}
 		e.draw(g);
 		d.draw(g);
@@ -321,6 +326,10 @@ public class Board extends JPanel {
 			return false;
 		}
 		return true;
+	}
+	
+	public boolean getTie(){
+		return tie;
 	}
 
 	public Player getPlayer1() {

@@ -7,6 +7,7 @@ public class EndTurn {
 	int width = 100;
 	int height = 50;
 	int playersTurn = 1;
+	static TextPrompt t = new TextPrompt();
 	static boolean yellow = true;
 	
 	public void draw(Graphics g) {
@@ -37,7 +38,7 @@ public class EndTurn {
 		else{
 			playersTurn = 1;
 		}
-		System.out.println("Turn ended. Players turn: " + playersTurn);
+		t.newPrompt("Player " + playersTurn + "'s turn has begun.", "Attention:");
 	}
 	
 	public int getTurn(){
