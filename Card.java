@@ -1,5 +1,10 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class Card {
 	String name;
@@ -11,7 +16,9 @@ public class Card {
 	int width = 75;
 	int height = 100;
 	boolean canAttack = false;
+	boolean clicked = false;
 	boolean blue = true;
+	BufferedImage image = null;
 	
 	public Card(){
 		
@@ -29,6 +36,12 @@ public class Card {
 		mana = Integer.parseInt(a[1]);
 		attack = Integer.parseInt(a[2]);
 		health = Integer.parseInt(a[3]);
+		try {
+			image = ImageIO.read(new File("C:\\Users\\PortableJelly\\Desktop\\Barfstone Art\\" + name + ".png"));
+			//image = ImageIO.read(new File("C:\\Users\\PortableJelly\\Desktop\\" + name + ".png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void setPosition(int x, int y) {
@@ -57,15 +70,16 @@ public class Card {
 	}
 
 	public void click() {
-		//width *= 1.2;
-		//height *= 1.2;
+		clicked = true;
+		width = 90;
+		height = 120;
 		blue = false;
-		System.out.println(name);
 	}
 
 	public void unclick() {
-		//width /= 1.2;
-		//height /= 1.2;
+		clicked = false;
+		width = 75;
+		height = 100;
 		blue = true;
 	}
 
@@ -100,10 +114,11 @@ public class Card {
 		else{
 			g.setColor(Color.RED);
 		}
-		g.fillRect(x, y, width, height);
+		g.drawImage(image, x, y, width, height, null);
+		//g.fillRect(x, y, width, height);
 		g.setColor(Color.WHITE);
-		g.drawString(name, x+(width/2)-(name.length()*2), y+(height/2));
-		g.drawString(attack + "/" + health, x+(width/2)-(name.length()*2), y+(height/2)+15);
-		g.drawString(mana + " MP", x+(width/2)-(name.length()*2), y+(height/2)+30);
+		g.drawString(name, x+(width/2)-(name.length()*2), y+(height/2)+15);
+		g.drawString(attack + "/" + health, x+(width/2)-(name.length()*2), y+(height/2)+30);
+		g.drawString(mana + " MP", x+(width/2)-(name.length()*2), y+(height/2)+45);
 	}
 }

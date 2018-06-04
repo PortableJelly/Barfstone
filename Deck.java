@@ -15,12 +15,12 @@ public class Deck {
 	public Deck(){
 		ArrayList<String> a = fileReader();
 		for(int i = 0; i < a.size(); i++){
-			unshuffled.add(new Card(((String) a.get(i)).split(", ")));
+			unshuffled.add(new Card(((String) a.get(i)).split(",")));
 		}
 		boolean foundNumber = false;
-		for (int i = 0; i < unshuffled.size()-1; i++){
+		for (int i = 0; i < unshuffled.size(); i++){
 			do{
-			int randCard = (int) (Math.random()*(unshuffled.size()-1));
+			int randCard = (int) (Math.random()*(unshuffled.size()));
 			if (!usedNumbers.contains(randCard)){
 				cards.add(unshuffled.get(randCard));
 				usedNumbers.add(randCard);

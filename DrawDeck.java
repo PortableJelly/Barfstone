@@ -1,5 +1,10 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class DrawDeck {
 	int x = 850;
@@ -7,7 +12,15 @@ public class DrawDeck {
 	int width = 100;
 	int height = 50;
 	static boolean purple = true;
+	BufferedImage image = null;
 	
+	public DrawDeck(){
+		try {
+			image = ImageIO.read(new File("C:\\Users\\PortableJelly\\Desktop\\Barfstone Art\\Draw Deck.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	public void draw(Graphics g) {
 		if (purple == true){
 			g.setColor(Color.magenta);
@@ -15,10 +28,11 @@ public class DrawDeck {
 			else{
 				g.setColor(Color.RED);
 			}
-		g.fillRect(x, y, width, height);
-		g.setColor(Color.WHITE);
-		g.drawString("Draw from Deck", x+10, y+(height/2));
-		g.drawString("(5 Mana)", x+15, y+(height/2)+10);
+		g.drawImage(image, x, y, width, height, null);
+		//g.fillRect(x, y, width, height);
+		//g.setColor(Color.WHITE);
+		//g.drawString("Draw from Deck", x+10, y+(height/2));
+		//g.drawString("(5 Mana)", x+15, y+(height/2)+10);
 	}
 	
 	public void pressed(){

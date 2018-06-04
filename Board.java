@@ -100,7 +100,7 @@ public class Board extends JPanel {
 								t.newPrompt("No cards left in deck.", "Attention:");
 							}
 						} else {
-							
+							t.newPrompt("Player either does not have enough mana to do this or has at least 6 cards in hand.", "Attention:");
 						}
 					} else {
 						if (manaCheck(player2, 5) && player1.getHand().size() < 6) {
@@ -249,11 +249,21 @@ public class Board extends JPanel {
 	public void paint(Graphics g) {
 		if (e.getTurn() == 1) {
 			for (int i = 0; i < player1.getControlled().size(); i++) {
+				if (player1.getControlled().get(i).clicked){
+					player1.getControlled().get(i).setPosition(200 + (100 * i) - 7, 500 - 10);
+				}
+				else{
 				player1.getControlled().get(i).setPosition(200 + (100 * i), 500);
+		}
 				player1.getControlled().get(i).draw(g);
 			}
 			for (int i = 0; i < player1.getHand().size(); i++) {
+				if (player1.getHand().get(i).clicked){
+					player1.getHand().get(i).setPosition(200 + (100 * i) - 7, 650 - 10);
+				}
+				else{
 				player1.getHand().get(i).setPosition(200 + (100 * i), 650);
+				}
 				player1.getHand().get(i).draw(g);
 			}
 			for (int i = 0; i < player2.getControlled().size(); i++) {
@@ -336,6 +346,10 @@ public class Board extends JPanel {
 			tie = true;
 		}
 		tie = false;
+	}
+	
+	public void setVisible(boolean b){
+		f.setVisible(b);
 	}
 	
 	public boolean getTie(){
