@@ -83,8 +83,10 @@ public class Board extends JPanel {
 				if (mX > e.x && mX < e.x + e.width && mY > e.y && mY < e.y + e.height) {
 					e.click();
 					if (e.getTurn() == 1) {
+						t.newPrompt(player1.getName() + "'s turn has begun.", "Attention:");
 						player1.turnStart();
 					} else {
+						t.newPrompt(player2.getName() + "'s turn has begun.", "Attention:");
 						player2.turnStart();
 					}
 					tieCheck();
@@ -280,11 +282,21 @@ public class Board extends JPanel {
 			player2.draw(g);
 		} else {
 			for (int i = 0; i < player2.getControlled().size(); i++) {
+				if (player2.getControlled().get(i).clicked){
+					player2.getControlled().get(i).setPosition(200 + (100 * i) - 7, 500 - 10);
+				}
+				else{
 				player2.getControlled().get(i).setPosition(200 + (100 * i), 500);
+				}
 				player2.getControlled().get(i).draw(g);
 			}
 			for (int i = 0; i < player2.getHand().size(); i++) {
+				if (player2.getHand().get(i).clicked){
+					player2.getHand().get(i).setPosition(200 + (100 * i) - 7, 650 - 10);
+				}
+				else{
 				player2.getHand().get(i).setPosition(200 + (100 * i), 650);
+				}
 				player2.getHand().get(i).draw(g);
 			}
 			for (int i = 0; i < player1.getControlled().size(); i++) {

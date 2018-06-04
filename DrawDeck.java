@@ -16,7 +16,7 @@ public class DrawDeck {
 	
 	public DrawDeck(){
 		try {
-			image = ImageIO.read(new File("C:\\Users\\PortableJelly\\Desktop\\Barfstone Art\\Draw Deck.png"));
+			image = ImageIO.read(new File("H:\\Comp Sci 30\\Final Project\\Art\\Draw Deck.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -36,10 +36,18 @@ public class DrawDeck {
 	}
 	
 	public void pressed(){
+		width = 120;
+		height = 60;
+		x = 840;
+		y = 397;
 		purple = false;
 	}
 	
 	public void unclick(){
+		width = 100;
+		height = 50;
+		x = 850;
+		y = 400;
 		purple = true;
 	}
 	

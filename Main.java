@@ -38,18 +38,24 @@ public class Main {
 		p.add(quit);
 		BufferedImage myPicture = null;
 		try {
-			myPicture = ImageIO.read(new File("C:\\Users\\PortableJelly\\Desktop\\Barfstone Art\\barfstone.png"));
+			myPicture = ImageIO.read(new File("H:\\Comp Sci 30\\Final Project\\Art\\barfstone.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		JLabel picL = new JLabel(new ImageIcon(myPicture));
 		picL.setBounds(70, 25, 262, 108);
 		p.add(picL);
+		f.setLocationRelativeTo(null);
 		f.setResizable(false);
 		f.setVisible(true);
 
 		while (true) {
-			System.out.println("true");
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			//System.out.println("true");
 			if (playClicked) {
 				nameTake();
 			}
@@ -131,6 +137,7 @@ public class Main {
 		f2.setSize(800, 200);
 		f2.setVisible(true);
 		f2.setResizable(false);
+		f2.setLocationRelativeTo(null);
 		JPanel p2 = new JPanel();
 		f2.add(p2);
 		JLabel l = new JLabel("Barfstone is a card game played between two players.");

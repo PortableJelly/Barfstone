@@ -37,7 +37,7 @@ public class Card {
 		attack = Integer.parseInt(a[2]);
 		health = Integer.parseInt(a[3]);
 		try {
-			image = ImageIO.read(new File("C:\\Users\\PortableJelly\\Desktop\\Barfstone Art\\" + name + ".png"));
+			image = ImageIO.read(new File("H:\\Comp Sci 30\\Final Project\\Art\\" + name + ".png"));
 			//image = ImageIO.read(new File("C:\\Users\\PortableJelly\\Desktop\\" + name + ".png"));
 		} catch (IOException e) {
 			e.printStackTrace();

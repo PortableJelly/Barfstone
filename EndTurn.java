@@ -19,7 +19,7 @@ public class EndTurn {
 	
 	public EndTurn(){
 		try {
-			image = ImageIO.read(new File("C:\\Users\\PortableJelly\\Desktop\\Barfstone Art\\End Turn.png"));
+			image = ImageIO.read(new File("H:\\Comp Sci 30\\Final Project\\Art\\End Turn.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -38,11 +38,19 @@ public class EndTurn {
 	}
 	
 	public void pressed(){
+		width = 120;
+		height = 60;
+		x = 840;
+		y = 297;
 		yellow = false;
 
 	}
 	
 	public void unclick(){
+		width = 100;
+		height = 50;
+		x = 850;
+		y = 300;
 		yellow = true;
 	}
 	
