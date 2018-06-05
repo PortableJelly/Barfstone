@@ -3,13 +3,18 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Board extends JPanel {
-	
+
 	static TextPrompt t = new TextPrompt();
 	static JFrame f = new JFrame("Barfstone");
 	static EndTurn e = new EndTurn();
@@ -24,13 +29,23 @@ public class Board extends JPanel {
 	static int targetY;
 	Card cardClicked = new Card();
 	Card cardReleased = new Card();
+	static BufferedImage cardBack = null;
+	static BufferedImage background = null;
 
 	public void setup(String player1Name, String player2Name) {
-		player1 = new Player(player1Name, 1);
-		player2 = new Player(player2Name, 0);
+		player1 = new Player(player1Name, 1, "player1");
+		player2 = new Player(player2Name, 0, "player2");
 		for (int i = 0; i < 3; i++) {
 			player1.addToHand(player1.getDeck().drawCard());
 			player2.addToHand(player2.getDeck().drawCard());
+		}
+		try {
+			System.out.println("true");
+			cardBack = ImageIO.read(new File("C:\\Users\\PortableJelly\\Desktop\\Barfstone Art\\cardBack.png"));
+			background = ImageIO.read(new File("C:\\Users\\PortableJelly\\Desktop\\Barfstone Art\\background.png"));
+			//image = ImageIO.read(new File("C:\\Users\\PortableJelly\\Desktop\\" + name + ".png"));
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		f.setSize(1000, 800);
 		f.setLocationRelativeTo(null);
@@ -55,12 +70,15 @@ public class Board extends JPanel {
 								&& mX < player1.getHand().get(i).getX() + player1.getHand().get(i).getWidth()
 								&& mY > player1.getHand().get(i).getY()
 								&& mY < player1.getHand().get(i).getY() + player1.getHand().get(i).getHeight()) {
-							if (manaCheck(player1, player1.getHand().get(i).getMana()) && player1.getControlled().size() < 5) {
+							if (manaCheck(player1, player1.getHand().get(i).getMana())
+									&& player1.getControlled().size() < 5) {
 								player1.changeCurrentMana(player1.getHand().get(i).getMana());
 								player1.getControlled().add(player1.getHand().get(i));
 								player1.getHand().remove(i);
 							} else {
-								t.newPrompt("Player either does not have enough mana to play this or controls 5 minions.", "Attention:");
+								t.newPrompt(
+										"Player either does not have enough mana to play this or controls 5 minions.",
+										"Attention:");
 							}
 						}
 					}
@@ -70,12 +88,15 @@ public class Board extends JPanel {
 								&& mX < player2.getHand().get(i).getX() + player2.getHand().get(i).getWidth()
 								&& mY > player2.getHand().get(i).getY()
 								&& mY < player2.getHand().get(i).getY() + player2.getHand().get(i).getHeight()) {
-							if (manaCheck(player2, player2.getHand().get(i).getMana()) && player2.getControlled().size() < 5) {
+							if (manaCheck(player2, player2.getHand().get(i).getMana())
+									&& player2.getControlled().size() < 5) {
 								player2.changeCurrentMana(player2.getHand().get(i).getMana());
 								player2.getControlled().add(player2.getHand().get(i));
 								player2.getHand().remove(i);
 							} else {
-								t.newPrompt("Player either does not have enough mana to play this or controls 5 minions.", "Attention:");
+								t.newPrompt(
+										"Player either does not have enough mana to play this or controls 5 minions.",
+										"Attention:");
 							}
 						}
 					}
@@ -102,7 +123,9 @@ public class Board extends JPanel {
 								t.newPrompt("No cards left in deck.", "Attention:");
 							}
 						} else {
-							t.newPrompt("Player either does not have enough mana to do this or has at least 6 cards in hand.", "Attention:");
+							t.newPrompt(
+									"Player either does not have enough mana to do this or has at least 6 cards in hand.",
+									"Attention:");
 						}
 					} else {
 						if (manaCheck(player2, 5) && player1.getHand().size() < 6) {
@@ -114,7 +137,9 @@ public class Board extends JPanel {
 								t.newPrompt("No cards left in deck.", "Attention:");
 							}
 						} else {
-							t.newPrompt("Player either does not have enough mana to do this or has at least 6 cards in hand.", "Attention:");
+							t.newPrompt(
+									"Player either does not have enough mana to do this or has at least 6 cards in hand.",
+									"Attention:");
 						}
 					}
 					// d.click();
@@ -249,76 +274,75 @@ public class Board extends JPanel {
 	}
 
 	public void paint(Graphics g) {
+		g.drawImage(background, -2, -13, null);
 		if (e.getTurn() == 1) {
 			for (int i = 0; i < player1.getControlled().size(); i++) {
-				if (player1.getControlled().get(i).clicked){
-					player1.getControlled().get(i).setPosition(200 + (100 * i) - 7, 500 - 10);
+				if (player1.getControlled().get(i).clicked) {
+					player1.getControlled().get(i).setPosition(250 + (100 * i) - 7, 465);
+				} else {
+					player1.getControlled().get(i).setPosition(250 + (100 * i), 475);
 				}
-				else{
-				player1.getControlled().get(i).setPosition(200 + (100 * i), 500);
-		}
 				player1.getControlled().get(i).draw(g);
 			}
 			for (int i = 0; i < player1.getHand().size(); i++) {
-				if (player1.getHand().get(i).clicked){
-					player1.getHand().get(i).setPosition(200 + (100 * i) - 7, 650 - 10);
-				}
-				else{
-				player1.getHand().get(i).setPosition(200 + (100 * i), 650);
+				if (player1.getHand().get(i).clicked) {
+					player1.getHand().get(i).setPosition(250 + (100 * i) - 7, 615);
+				} else {
+					player1.getHand().get(i).setPosition(250 + (100 * i), 625);
 				}
 				player1.getHand().get(i).draw(g);
 			}
 			for (int i = 0; i < player2.getControlled().size(); i++) {
-				player2.getControlled().get(i).setPosition(200 + (100 * i), 300);
+				player2.getControlled().get(i).setPosition(250 + (100 * i), 250);
 				player2.getControlled().get(i).draw(g);
 			}
 			for (int i = 0; i < player2.getHand().size(); i++) {
-				g.setColor(Color.RED);
-				g.fillRect(200 + (100 * i), 150, 75, 100);
+				g.drawImage(cardBack, 250 + (100 * i), 100, 75, 100, null);
+				//g.setColor(Color.RED);
+				//g.fillRect(200 + (100 * i), 150, 75, 100);
 			}
-			player1.setPosition(75, 550);
+			player1.setPosition(125, 515);
 			player1.draw(g);
-			player2.setPosition(75, 150);
+			player2.setPosition(125, 100);
 			player2.draw(g);
 		} else {
 			for (int i = 0; i < player2.getControlled().size(); i++) {
-				if (player2.getControlled().get(i).clicked){
-					player2.getControlled().get(i).setPosition(200 + (100 * i) - 7, 500 - 10);
-				}
-				else{
-				player2.getControlled().get(i).setPosition(200 + (100 * i), 500);
+				if (player2.getControlled().get(i).clicked) {
+					player2.getControlled().get(i).setPosition(250 + (100 * i) - 7, 465);
+				} else {
+					player2.getControlled().get(i).setPosition(250 + (100 * i), 475);
 				}
 				player2.getControlled().get(i).draw(g);
 			}
 			for (int i = 0; i < player2.getHand().size(); i++) {
-				if (player2.getHand().get(i).clicked){
-					player2.getHand().get(i).setPosition(200 + (100 * i) - 7, 650 - 10);
-				}
-				else{
-				player2.getHand().get(i).setPosition(200 + (100 * i), 650);
+				if (player2.getHand().get(i).clicked) {
+					player2.getHand().get(i).setPosition(250 + (100 * i) - 7, 615);
+				} else {
+					player2.getHand().get(i).setPosition(250 + (100 * i), 625);
 				}
 				player2.getHand().get(i).draw(g);
 			}
 			for (int i = 0; i < player1.getControlled().size(); i++) {
-				player1.getControlled().get(i).setPosition(200 + (100 * i), 300);
+				player1.getControlled().get(i).setPosition(250 + (100 * i), 250);
 				player1.getControlled().get(i).draw(g);
 			}
 			for (int i = 0; i < player1.getHand().size(); i++) {
-				g.setColor(Color.RED);
-				g.fillRect(200 + (100 * i), 150, 75, 100);
+				g.drawImage(cardBack, 250 + (100 * i), 100, 75, 100, null);
+				//g.setColor(Color.RED);
+				//g.fillRect(200 + (100 * i), 150, 75, 100);
 			}
-			player2.setPosition(75, 550);
+			player2.setPosition(125, 515);
 			player2.draw(g);
-			player1.setPosition(75, 150);
+			player1.setPosition(125, 100);
 			player1.draw(g);
 		}
 		if (clicked) {
 			g.setColor(Color.RED);
-			g.fillOval(targetX-5, targetY-5, 20, 20);
+			g.fillOval(targetX - 5, targetY - 5, 20, 20);
 			g.setColor(Color.WHITE);
 			g.fillOval(targetX, targetY, 10, 10);
 			g.setColor(Color.RED);
-			g.fillOval(targetX+2,targetY+2, 5, 5);
+			g.fillOval(targetX + 2, targetY + 2, 5, 5);
 		}
 		e.draw(g);
 		d.draw(g);
@@ -352,19 +376,21 @@ public class Board extends JPanel {
 		}
 		return true;
 	}
-	
-	public void tieCheck(){
-		if (player1.getDeck().returnSize() == 0 && player1.getHand().size() == 0 && player1.getControlled().size() == 0 && player2.getDeck().returnSize() == 0 && player2.getHand().size() == 0 && player2.getControlled().size() == 0){
+
+	public void tieCheck() {
+		if (player1.getDeck().returnSize() == 0 && player1.getHand().size() == 0 && player1.getControlled().size() == 0
+				&& player2.getDeck().returnSize() == 0 && player2.getHand().size() == 0
+				&& player2.getControlled().size() == 0) {
 			tie = true;
 		}
 		tie = false;
 	}
-	
-	public void setVisible(boolean b){
+
+	public void setVisible(boolean b) {
 		f.setVisible(b);
 	}
-	
-	public boolean getTie(){
+
+	public boolean getTie() {
 		return tie;
 	}
 

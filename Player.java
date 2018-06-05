@@ -1,24 +1,36 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 public class Player {
 	String name = "blank";
 	int health = 30;
 	int mana = 1;
 	int currentMana = 1;
-	int x = 200;
-	int y = 650;
+	int x = 300;
+	int y = 600;
 	int width = 100;
 	int height = 150;
 	Deck deck = new Deck();
 	ArrayList<Card> hand = new ArrayList<Card>();
 	ArrayList<Card> controlled = new ArrayList<Card>();
+	BufferedImage image = null;
 	
-	public Player(String name, int i){
+	public Player(String name, int i, String imageName){
 		this.name = name;
 		mana = i;
 		currentMana = i;
+		try {
+			image = ImageIO.read(new File("C:\\Users\\PortableJelly\\Desktop\\Barfstone Art\\" + imageName + ".png"));
+			//image = ImageIO.read(new File("C:\\Users\\PortableJelly\\Desktop\\" + name + ".png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getName() {
@@ -106,14 +118,15 @@ public class Player {
 	}
 	
 	public void draw(Graphics g) {
-		g.setColor(Color.GREEN);
-		g.fillRect(x, y, width, height);
+		g.drawImage(image, x, y, width, height, null);
+		//g.setColor(Color.GREEN);
+		//g.fillRect(x, y, width, height);
 		g.setColor(Color.WHITE);
-		g.drawString(name, x+(width/2)-(name.length()*2), y+(height/2));
+		g.drawString(name, x+(width/2)-(name.length()*2), y+(height/2)+15);
 		g.setColor(Color.WHITE);
-		g.drawString(Integer.toString(currentMana) + "/" + Integer.toString(mana) + " MP", x+(width/2)-(name.length()*2), y+(height/2)+50);
+		g.drawString(Integer.toString(currentMana) + "/" + Integer.toString(mana) + " MP", x+(width/2)-10, y+(height/2)+65);
 		g.setColor(Color.WHITE);
-		g.drawString(Integer.toString(health) + " HP", x+(width/2)-(name.length()*2), y+(height/2)+25);
+		g.drawString(Integer.toString(health) + " HP", x+(width/2)-10, y+(height/2)+40);
 	}
 
 }

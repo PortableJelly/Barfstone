@@ -12,14 +12,13 @@ public class EndTurn {
 	int width = 100;
 	int height = 50;
 	int playersTurn = 1;
-	static TextPrompt t = new TextPrompt();
 	static boolean yellow = true;
 	BufferedImage image = null;
 	
 	
 	public EndTurn(){
 		try {
-			image = ImageIO.read(new File("H:\\Comp Sci 30\\Final Project\\Art\\End Turn.png"));
+			image = ImageIO.read(new File("C:\\Users\\PortableJelly\\Desktop\\Barfstone Art\\End Turn.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -61,7 +60,6 @@ public class EndTurn {
 		else{
 			playersTurn = 1;
 		}
-		t.newPrompt("Player " + playersTurn + "'s turn has begun.", "Attention:");
 	}
 	
 	public int getTurn(){

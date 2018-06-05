@@ -16,7 +16,7 @@ public class DrawDeck {
 	
 	public DrawDeck(){
 		try {
-			image = ImageIO.read(new File("H:\\Comp Sci 30\\Final Project\\Art\\Draw Deck.png"));
+			image = ImageIO.read(new File("C:\\Users\\PortableJelly\\Desktop\\Barfstone Art\\Draw Deck.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
