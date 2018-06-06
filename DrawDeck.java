@@ -1,4 +1,11 @@
-import java.awt.Color;
+/**
+ * @author Harrison Fah
+ * @version 1.0
+ * Start Date: 23/5/2018
+ * Finish Date: 4/6/2018
+ * Copyright 2018, Harrison Fah, All rights reserved.
+ */
+
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -11,9 +18,11 @@ public class DrawDeck {
 	int y = 400;
 	int width = 100;
 	int height = 50;
-	static boolean purple = true;
 	BufferedImage image = null;
 	
+	/**
+	 * Constructor for making new draw deck button and setting its image.
+	 */
 	public DrawDeck(){
 		try {
 			image = ImageIO.read(new File("C:\\Users\\PortableJelly\\Desktop\\Barfstone Art\\Draw Deck.png"));
@@ -21,38 +30,34 @@ public class DrawDeck {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Draws the button.
+	 * 
+	 * @param g Graphics
+	 */
 	public void draw(Graphics g) {
-		if (purple == true){
-			g.setColor(Color.magenta);
-			}
-			else{
-				g.setColor(Color.RED);
-			}
 		g.drawImage(image, x, y, width, height, null);
-		//g.fillRect(x, y, width, height);
-		//g.setColor(Color.WHITE);
-		//g.drawString("Draw from Deck", x+10, y+(height/2));
-		//g.drawString("(5 Mana)", x+15, y+(height/2)+10);
 	}
 	
+	/**
+	 * When button is pressed, increases size by 1.2.
+	 */
 	public void pressed(){
 		width = 120;
 		height = 60;
 		x = 840;
 		y = 397;
-		purple = false;
 	}
 	
+	/**
+	 * When button is unpressed, sets size to normal.
+	 */
 	public void unclick(){
 		width = 100;
 		height = 50;
 		x = 850;
 		y = 400;
-		purple = true;
-	}
-	
-	public void click(){
-		System.out.println("Drawed from deck");
 	}
 	
 }

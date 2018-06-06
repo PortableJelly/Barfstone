@@ -1,3 +1,11 @@
+/**
+ * @author Harrison Fah
+ * @version 1.0
+ * Start Date: 23/5/2018
+ * Finish Date: 4/6/2018
+ * Copyright 2018, Harrison Fah, All rights reserved.
+ */
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,6 +20,9 @@ public class Deck {
 	ArrayList<Integer> usedNumbers = new ArrayList<Integer>();
 	Queue<Card> cards = new LinkedList<Card>();
 	
+	/**
+	 * Reads from the file of cards and adds them to an array, then shuffles the cards into a queue.
+	 */
 	public Deck(){
 		ArrayList<String> a = fileReader();
 		for(int i = 0; i < a.size(); i++){
@@ -32,6 +43,11 @@ public class Deck {
 		
 	}
 	
+	/**
+	 * Reads the card data from the file and puts it into an array list.
+	 * 
+	 * @return Returns the array list of data.
+	 */
 	public ArrayList<String> fileReader(){
 		ArrayList<String> a = null;
 		try{
@@ -52,6 +68,11 @@ public class Deck {
 		return a;
 	}
 	
+	/**
+	 * Takes a card from the deck and returns it.
+	 * 
+	 * @return Card taken from deck.
+	 */
 	public Card drawCard(){
 		try{
 		if (!cards.peek().equals(null)){
@@ -64,6 +85,9 @@ public class Deck {
 		return null;
 	}
 	
+	/**
+	 * Checks deck to see if there is a card that can be drawn.
+	 */
 	public boolean checkDeck(){
 		try{
 			if (!cards.peek().equals(null)){
@@ -75,14 +99,13 @@ public class Deck {
 		return false;
 	}
 	
+	/**
+	 * Returns size of deck.
+	 * 
+	 * @return Size of deck
+	 */
 	public int returnSize(){
 		return cards.size();
-	}
-	
-	public void printDeck(){
-		for (Card card : cards){
-			System.out.println(card.getName() + card.getMana() + card.getAttack() + card.getHealth());
-			}
 	}
 	
 }

@@ -1,4 +1,11 @@
-import java.awt.Color;
+/**
+ * @author Harrison Fah
+ * @version 1.0
+ * Start Date: 23/5/2018
+ * Finish Date: 4/6/2018
+ * Copyright 2018, Harrison Fah, All rights reserved.
+ */
+
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -15,7 +22,9 @@ public class EndTurn {
 	static boolean yellow = true;
 	BufferedImage image = null;
 	
-	
+	/**
+	 * Constructor for when new end turn button is created.
+	 */
 	public EndTurn(){
 		try {
 			image = ImageIO.read(new File("C:\\Users\\PortableJelly\\Desktop\\Barfstone Art\\End Turn.png"));
@@ -23,28 +32,30 @@ public class EndTurn {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Method for drawing button.
+	 * 
+	 * @param g Graphics
+	 */
 	public void draw(Graphics g) {
-		if (yellow == true){
-			g.setColor(Color.YELLOW);
-			}
-			else{
-				g.setColor(Color.RED);
-			}
 		g.drawImage(image, x, y, width, height, null);
-		//g.fillRect(x, y, width, height);
-		//g.setColor(Color.BLACK);
-		//g.drawString("End turn.", x+10, y+(height/2));
 	}
 	
+	/**
+	 * When button is pressed, increase size by 1.2.
+	 */
 	public void pressed(){
 		width = 120;
 		height = 60;
 		x = 840;
 		y = 297;
-		yellow = false;
 
 	}
 	
+	/**
+	 * When button is not pressed return size to normal.
+	 */
 	public void unclick(){
 		width = 100;
 		height = 50;
@@ -53,6 +64,9 @@ public class EndTurn {
 		yellow = true;
 	}
 	
+	/**
+	 * When button is clicked, change player's turn.
+	 */
 	public void click(){
 		if (playersTurn == 1){
 			playersTurn = 2;
@@ -62,6 +76,11 @@ public class EndTurn {
 		}
 	}
 	
+	/** 
+	 * Returns the current player's turn.
+	 * 
+	 * @return Player's turn
+	 */
 	public int getTurn(){
 		return playersTurn;
 	}
